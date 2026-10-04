@@ -1,4 +1,4 @@
-baseURL: "https://joeblog.vercel.app"
+baseURL: "https://joeblog-blond.vercel.app"
 locale: "pt-br"
 title: "Meu Blog Terminal"
 theme: "re-terminal"
