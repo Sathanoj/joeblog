@@ -13,19 +13,19 @@
 
 {{ template "_internal/google_analytics.html" . }}
 
-<link rel="stylesheet" href="{{ "styles.css" | absURL }}">
+<link rel="stylesheet" href="{{ "styles.css" | relURL }}">
 
 <!-- Custom CSS to override theme properties (/static/style.css) -->
 {{ if (fileExists "static/style.css") -}}
-  <link rel="stylesheet" href="{{ "style.css" | absURL }}">
+  <link rel="stylesheet" href="{{ "style.css" | relURL }}">
 {{- end }}
 
 <!-- Icons -->
 {{ if isset $.Site.Params "favicon" }}
   <link rel="shortcut icon" href="{{ $.Site.Params.favicon | absURL }}">
 {{ else }}
-  <link rel="shortcut icon" href="{{ printf "img/theme-colors/%s.png" (or .Params.color $.Site.Params.ThemeColor | default "orange") | absURL }}">
-  <link rel="apple-touch-icon" href="{{ printf "img/theme-colors/%s.png" (or .Params.color $.Site.Params.ThemeColor | default "orange") | absURL }}">
+  <link rel="shortcut icon" href="{{ printf "img/theme-colors/%s.png" (or .Params.color $.Site.Params.ThemeColor | default "orange") | relURL }}">
+  <link rel="apple-touch-icon" href="{{ printf "img/theme-colors/%s.png" (or .Params.color $.Site.Params.ThemeColor | default "orange") | relURL }}">
 {{ end }}
 
 <!-- Twitter Card -->
