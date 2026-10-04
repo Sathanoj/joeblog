@@ -1,0 +1,24 @@
+backend:
+  name: github
+  repo: Sathanoj/joeblog
+  branch: main
+  base_url: https://decap-cms-squeezer.fly.dev
+
+media_folder: "static/images"
+public_folder: "/images"
+
+collections:
+  - name: "posts"
+    label: "Contos e Postagens"
+    folder: "content/posts"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { label: "Título", name: "title", widget: "string" }
+      - { label: "Data", name: "date", widget: "datetime" }
+      - { label: "Imagem de Capa", name: "cover", widget: "image", required: false }
+      - { label: "Descrição", name: "description", widget: "text", required: false }
+      - { label: "Tags", name: "tags", widget: "list", default: ["conto"] }
+      - { label: "Categoria", name: "categories", widget: "string", required: false }
+      - { label: "Rascunho", name: "draft", widget: "boolean", default: false }
+      - { label: "Conteúdo", name: "body", widget: "markdown" }

@@ -1,0 +1,14 @@
+baseURL: "https://joeblog.vercel.app"
+locale: "pt-br"
+title: "Meu Blog Terminal"
+theme: "re-terminal"
+
+params:
+  themeColor: "green"
+  showMenuItems: 4
+  
+  mainMenu:
+    - name: "Contos & Postagens"
+      url: "/posts"
+    - name: "Sobre"
+      url: "/sobre"
