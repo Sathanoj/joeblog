@@ -2,5 +2,8 @@
   "framework": "hugo",
   "buildCommand": "hugo",
   "outputDirectory": "public",
-  "cleanUrls": true
+  "cleanUrls": true,
+  "routes": [
+    { "src": "^/$", "dest": "/index.html" }
+  ]
 }
