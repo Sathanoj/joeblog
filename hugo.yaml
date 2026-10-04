@@ -1,22 +1,59 @@
 baseURL: "https://joeblog-blond.vercel.app"
 locale: "pt-br"
 title: "Joe Blog"
-theme: "re-terminal"
+theme: "stacknote"
 
-disableKinds:
-  - RSS
+pagination:
+  pagerSize: 6
+
+taxonomies:
+  tag: tags
+
+outputs:
+  home: [HTML, RSS, JSON]
 
 params:
-  themeColor: "blue"
-  showMenuItems: 4
+  author: Sathanoj
+  authorInitials: S
+  tagline: Um blog qualquer
+  description: Reflexões, contos e ideias sobre tecnologia e código.
+  homeEyebrow: BLOG · TERMINAL
+  homeTitle: Notas de um desenvolvedor
+  homeIntro: Pensamentos soltos sobre engenharia, código e tecnologia.
+  aboutIntro: Um desenvolvedor que escreve sobre o que aprende.
+  mainSection: contos
+  showToc: false
+  showTopics: true
+  showAbout: true
+  showNewsletter: false
+  minTagPostsToIndex: 1
+  themeColor: "#FAFAF7"
+
+  socialLinks:
+    - name: github
+      url: https://github.com/Sathanoj
 
 menu:
   main:
     - name: "~/contos"
-      url: "/contos"
+      url: /contos/
+      weight: 10
     - name: "~/ideias"
-      url: "/ideias"
+      url: /ideias/
+      weight: 20
     - name: "~/tags"
-      url: "/tags"
+      url: /tags/
+      weight: 30
     - name: "~/sobre"
-      url: "/sobre"
+      url: /sobre/
+      weight: 40
+
+related:
+  includeNewer: true
+  threshold: 40
+  toLower: true
+  indices:
+    - name: tags
+      weight: 100
+    - name: date
+      weight: 10
