@@ -15,3 +15,10 @@ def conectar_terminal():
     print(f"Status do sistema: {status}")
 
 conectar_terminal()
+```
+
+```javascript
+function fuck() {
+
+}
+```

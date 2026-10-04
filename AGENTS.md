@@ -1,106 +1,39 @@
-Com a parte estática do Hugo funcionando, a camada de "backend" para permitir login e edição direto pelo navegador é implementada através de um CMS Baseado em Git (Git-based CMS), como o Decap CMS.
+Você é um desenvolvedor especialista em Hugo (SSG), HTML5, CSS3/Tailwind e JavaScript puro.
 
-Não existe um servidor de banco de dados rodando continuamente. Em vez disso, a autenticação e a gravação de dados ocorrem através da API do próprio GitHub, usando um serviço de OAuth Gateway.
-Como Funciona o Fluxo do Backend Estático
+Estou desenvolvendo um blog estático em Hugo utilizando o tema "re-terminal" (estilo retrô/terminal). O projeto está hospedado na Vercel. Preciso de duas implementações principais mantendo o visual e a identidade estética de terminal/hacker (fontes monospace, tons verdes/pretos, bordas simples):
 
-[Autora no Celular/PC] 
-         │ 1. Acessa /admin e clica em "Login com GitHub"
-         ▼
-[Serviço OAuth Gateway] ──► Autentica o usuário com o GitHub
-         │
-         ▼
-[Painel Decap CMS no Navegador] 
-         │ 2. Escreve conto, anexa imagens e clica em "Publicar"
-         ▼
-[GitHub API] ──► Cria um Commit diretamente no repositório
-         │
-         ▼
-[Vercel / Cloudflare Pages] ──► Detecta o Commit e faz a Build automática
+---
 
-Passo 1: Criar os Arquivos do Frontend do CMS no Hugo
+### OBJETIVO 1: Sistema de Busca Instantânea Local (Fuse.js + JSON)
+Preciso de uma busca rápida no frontend sem dependência de APIs externas ou backend.
 
-Dentro do seu projeto Hugo, crie a pasta static/admin/ com dois arquivos:
-1. static/admin/index.html
+1. Configurar a saída JSON no Hugo:
+   - Ajustar o arquivo de configuração (`hugo.yaml`) para habilitar o formato `JSON` na página inicial (`home`).
+   - Criar o template `layouts/_default/index.json` que vai gerar o índice com os campos: `title`, `date`, `permalink`, `tags`, `categories` e `content` (texto limpo/plain).
 
-Este arquivo carrega a interface gráfica do painel de controle.
-HTML
+2. Implementar a Interface de Busca no Tema:
+   - Criar um componente/partial HTML em `layouts/partials/search.html` simulando um comando de terminal (ex: `[user@blog ~]$ search _`).
+   - Adicionar o script do Fuse.js (pode ser via CDN ou JS embutido) e o script customizado de busca.
+   - Os resultados devem aparecer dinamicamente abaixo do campo de busca conforme o usuário digita, formatados com links para os posts e destaque para o título e tags.
 
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Painel de Controle - Blog</title>
-  </head>
-  <body>
-    <!-- Script principal do Decap CMS -->
-    <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
-  </body>
-</html>
+---
 
-2. static/admin/config.yml
+### OBJETIVO 2: Organização por Seções e Menu Estendido
+1. Estruturação do `hugo.yaml`:
+   - Configurar a lista `mainMenu` em `params` para incluir links com sintaxe de caminho do terminal:
+     - `~/contos` -> `/contos`
+     - `~/ideias` -> `/ideias`
+     - `~/tags` -> `/tags`
+     - `~/sobre` -> `/sobre`
 
-Este arquivo instrui o CMS sobre onde salvar os posts e quais campos exibir para a autora.
-YAML
+2. Páginas de Listagem de Seção:
+   - Garantir que criar pastas em `content/contos/` e `content/ideias/` filtre automaticamente os posts daquela seção específica sem quebrar o layout do tema `re-terminal`.
 
-backend:
-  name: github
-  repo: seu-usuario/seu-repositorio-blog # Substitua pelo seu usuário e nome do repo no GitHub
-  branch: main # ou master
-  base_url: https://site-authenticator.vercel.app # URL do gateway OAuth (configurado no Passo 2)
+---
 
-# Onde salvar as imagens enviadas pelo painel
-media_folder: "static/images"
-public_folder: "/images"
+### DIRETRIZES TÉCNICAS:
+- Mantenha a compatibilidade com o Hugo Extended v0.167+.
+- Não altere arquivos diretamente dentro da pasta `themes/re-terminal/`. Toda alteração/sobrescrita de layout deve ser feita criando os arquivos correspondentes na raiz do projeto (ex: na pasta `layouts/` local).
+- Garanta que todo o código JavaScript seja leve, sem dependências além do Fuse.js, e que o CSS siga o mesmo padrão de cores e fontes do tema `re-terminal`.
 
-# Estrutura dos formulários
-collections:
-  - name: "posts"
-    label: "Contos e Postagens"
-    folder: "content/posts"
-    create: true
-    slug: "{{slug}}"
-    fields:
-      - { label: "Título", name: "title", widget: "string" }
-      - { label: "Data", name: "date", widget: "datetime" }
-      - { label: "Rascunho", name: "draft", widget: "boolean", default: false }
-      - { label: "Conteúdo em Markdown", name: "body", widget: "markdown" }
-
-Passo 2: Configurar o Servidor de Autenticação OAuth
-
-Como o GitHub exige uma chave secreta para realizar o login via OAuth e um site estático não pode guardar chaves secretas com segurança, utiliza-se um pequeno intermediário de autenticação.
-
-Existem duas formas simples de implementar isso sem pagar nada:
-Opção A: Usar o Decap Bridge / Squeezer (Mais Rápido)
-
-    Crie uma conta no Decap Bridge ou use o serviço gratuito Decap CMS OAuth Provider.
-
-    Ele fornece uma URL pronta para colocar em base_url no seu config.yml.
-
-Opção B: Criar um OAuth Gateway próprio na Vercel (Total Controle)
-
-Se quiser manter o controle total da infraestrutura:
-
-    Faça um fork do repositório open-source decap-cms-oauth-provider.
-
-    Faça o deploy desse projeto de 1 clique na Vercel.
-
-    Crie um OAuth App no GitHub (Settings > Developer Settings > OAuth Apps):
-
-        Homepage URL: URL do seu blog.
-
-        Authorization callback URL: [https://seu-oauth-gateway.vercel.app/callback](https://seu-oauth-gateway.vercel.app/callback).
-
-    Insira o CLIENT_ID e CLIENT_SECRET gerados pelo GitHub nas variáveis de ambiente do seu gateway na Vercel.
-
-Passo 3: Experiência Final do Usuário Admin
-
-    A autora acessa [seudominio.com/admin](https://seudominio.com/admin) de qualquer celular ou computador.
-
-    Clica no botão "Login with GitHub".
-
-    O painel visual abre com a lista de todos os contos existentes.
-
-    Ela pode editar posts antigos, criar novos, adicionar tags, anexar imagens e formatar texto em tempo real.
-
-    Ao clicar em "Publish", o Decap CMS envia a alteração direto para o seu repositório do GitHub e o servidor de hospedagem (Vercel ou Cloudflare) publica a nova versão do site em questão de segundos.
+Por favor, forneça os arquivos necessários, seus caminhos exatos na estrutura de diretórios do Hugo e o código completo pronto para copiar e colar.

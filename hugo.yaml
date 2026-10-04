@@ -1,17 +1,22 @@
 baseURL: "https://joeblog-blond.vercel.app"
 locale: "pt-br"
-title: "Meu Blog Terminal"
+title: "Joe Blog"
 theme: "re-terminal"
 
 disableKinds:
   - RSS
 
 params:
-  themeColor: "green"
+  themeColor: "blue"
   showMenuItems: 4
-  
-  mainMenu:
-    - name: "Contos & Postagens"
-      url: "/posts"
-    - name: "Sobre"
+
+menu:
+  main:
+    - name: "~/contos"
+      url: "/contos"
+    - name: "~/ideias"
+      url: "/ideias"
+    - name: "~/tags"
+      url: "/tags"
+    - name: "~/sobre"
       url: "/sobre"
