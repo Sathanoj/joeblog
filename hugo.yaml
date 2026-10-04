@@ -3,6 +3,9 @@ locale: "pt-br"
 title: "Meu Blog Terminal"
 theme: "re-terminal"
 
+disableKinds:
+  - RSS
+
 params:
   themeColor: "green"
   showMenuItems: 4
