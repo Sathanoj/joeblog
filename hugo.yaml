@@ -35,16 +35,16 @@ params:
 
 menu:
   main:
-    - name: "~/contos"
+    - name: "contos"
       url: /contos/
       weight: 10
-    - name: "~/ideias"
+    - name: "ideias"
       url: /ideias/
       weight: 20
-    - name: "~/tags"
+    - name: "tags"
       url: /tags/
       weight: 30
-    - name: "~/sobre"
+    - name: "sobre"
       url: /sobre/
       weight: 40
 
